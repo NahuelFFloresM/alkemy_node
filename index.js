@@ -1,9 +1,8 @@
 'use strict'
-require('dotenv').config()
 
+require('dotenv').config()
 const express = require("express");
 const logger = require('morgan');
-const {Sequelize,DataTypes} = require("sequelize");
 var path = require('path');
 const bodyParser = require('body-parser');
 
@@ -11,39 +10,28 @@ const bodyParser = require('body-parser');
 const http = require('http');
 // Set up the express app
 const app = express();
+
+// Seteado Base de Datos
+require("./db");
+
 // Log requests to the console.
 app.use(logger('dev'));
+
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Database Connection
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-     host: process.env.DB_HOST,
-     dialect:'mysql'
-});
-
-
-
-/**
- * Testing Connection
- */
-// try {
-//      sequelize.authenticate();
-//      console.log('Connection has been established successfully.');
-// } catch (error) {
-//      console.error('Unable to connect to the database:', error);
-// }
-
 //Routes Import
 var routes = require('./routes/index_routes');
 var charactersRoutes = require('./routes/character_routes');
+var moviesRoutes = require('./routes/movies_routes');
 
 
 // ROUTES
 app.use('/', routes);
 app.use('/characters', charactersRoutes);
+app.use('/movies', moviesRoutes);
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('*', (req, res) => res.status(200).send('Oops, looks like theres no where to go...',));
