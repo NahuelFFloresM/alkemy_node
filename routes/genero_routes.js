@@ -22,7 +22,7 @@ router.post('/', async function(req,res,next){
 })
 
 router.put('/', async function(req,res,next){
-	await Genero.update({'nombre':req.body.mobre},{
+	await Genero.update({'nombre':req.body.nombre,'imagen':req.body.imagen},{
 		where:{
 			id: req.body.id_genero
 		}
@@ -35,11 +35,11 @@ router.put('/', async function(req,res,next){
 });
 
 router.delete('/', async function (req,res,next){
-	const delGen = await User.destroy({
+	await Genero.destroy({
 		where: {
 			id: req.body.id_genero
 		}
-	}).then((item) => {
+	}).then(() => {
 		res.status(200).send({'message':'Genero Borrado'});
 	})
 	.catch((err)=>{
