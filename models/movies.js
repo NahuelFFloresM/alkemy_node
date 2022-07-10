@@ -1,27 +1,30 @@
-// const { Sequelize, Model, DataTypes } = require("sequelize");
-// const sequelize = new Sequelize("sqlite::memory:");
+const {DataTypes} = require("sequelize");
+const sequelize = require('../db.js');
 
-module.exports = (sequelize,DataTypes) => {
-  
-  const Pelicula = sequelize.define("pelicula", {
-    Imagen: DataTypes.TEXT,
-    Titulo: DataTypes.TEXT,
-    Fecha_Creacion: DataTypes.DATEONLY,
-    Calificación: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-      validate: {
-          min: 1,
-          max: 5,
-      }
+const GeneroModel = require('./genero.js');
+
+const Pelicula = sequelize.define("pelicula", {
+  imagen: DataTypes.TEXT,
+  titulo: DataTypes.TEXT,
+  fecha_creacion: DataTypes.DATEONLY,
+  calificacion: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1,
+    validate: {
+        min: 1,
+        max: 5,
     }
-  },
-  {
-    timestamps: false,
   }
-  );
+},
+{
+  timestamps: false,
+  tableName:'pelicula',
+  freezeTableName: true,
+}
+);
 
-  return Pelicula;
+GeneroModel.belongsToMany(Pelicula, { through: 'MovieGenero' });
+Pelicula.belongsToMany(GeneroModel, { through: 'MovieGenero' });
 
-};
+module.exports = Pelicula;

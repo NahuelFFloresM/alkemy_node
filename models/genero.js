@@ -1,14 +1,15 @@
-module.exports = (sequelize,DataTypes) => {
-  
-  const Genero = sequelize.define("genero", {
-    Nombre: DataTypes.TEXT,
-    Imagen: DataTypes.TEXT,
-  },
-  {
-    timestamps: false,
-  }
-  );
+const {DataTypes} = require("sequelize");
+const sequelize = require('../db.js');
 
-  return Genero;
+const Genero = sequelize.define("genero", {
+  nombre: DataTypes.TEXT,
+  imagen: DataTypes.TEXT,
+},
+{
+  timestamps: false,
+  tableName:'genero',
+  freezeTableName: true,
+}
+);
 
-};
+module.exports = Genero;

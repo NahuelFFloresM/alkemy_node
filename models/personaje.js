@@ -1,16 +1,22 @@
-module.exports = (sequelize,DataTypes) => {
-  
-  const Personaje = sequelize.define("personaje", {
-    Imagen: DataTypes.TEXT,
-    Nombre: DataTypes.TEXT,
-    Edad: DataTypes.INTEGER,
-    Peso: DataTypes.INTEGER,
-    Historia: DataTypes.TEXT,
-  },
-  {
-    timestamps: false,
-  });
-  
-  return Personaje;
+const {DataTypes} = require("sequelize");
+const sequelize = require('../db.js');
 
-};
+const MovieModel = require('./movies');
+  
+const Personaje = sequelize.define("personaje", {
+  imagen: DataTypes.TEXT,
+  nombre: DataTypes.TEXT,
+  edad: DataTypes.INTEGER,
+  peso: DataTypes.INTEGER,
+  historia: DataTypes.TEXT,
+},
+{
+  timestamps: false,
+  tableName: 'personaje',
+  freezeTableName: true,
+});
+
+Personaje.belongsToMany(MovieModel, { through: 'CharacterMovie' });
+MovieModel.belongsToMany(Personaje, { through: 'CharacterMovie' });
+  
+module.exports = Personaje;

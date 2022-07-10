@@ -11,8 +11,7 @@ const http = require('http');
 // Set up the express app
 const app = express();
 
-// Seteado Base de Datos
-require("./db");
+
 
 // Log requests to the console.
 app.use(logger('dev'));
@@ -20,22 +19,28 @@ app.use(logger('dev'));
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 //Routes Import
 var routes = require('./routes/index_routes');
 var charactersRoutes = require('./routes/character_routes');
 var moviesRoutes = require('./routes/movies_routes');
+var generosRoutes = require('./routes/genero_routes');
 
 
 // ROUTES
 app.use('/', routes);
 app.use('/characters', charactersRoutes);
 app.use('/movies', moviesRoutes);
+app.use('/genero', generosRoutes);
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('*', (req, res) => res.status(200).send('Oops, looks like theres no where to go...',));
 
+
+// Seteado Base de Datos
+const sequelize = require("./db");
+sequelize.sync({force:false});
 
 // Server Config
 const port = parseInt(process.env.PORT, 10) || 8000;

@@ -3,7 +3,7 @@ const {Sequelize, DataTypes} = require('sequelize');
 const sequelize = new Sequelize("sqlite::memory:");
 var router = express.Router();
 
-const Movie = require('../models/movies.js')(sequelize,DataTypes);
+const Movie = require('../models/movies.js');
 
 router.get('/', function(req, res, next) {
 	Movie.findAll().then((movies) => {
