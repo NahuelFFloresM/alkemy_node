@@ -11,7 +11,7 @@ router.get('/', async function(req, res, next) {
 	}).catch((error) => {
 		console.log(error);
 	});
-	
+
 });
 
 router.post('/',async function(req,res,next){
@@ -37,6 +37,8 @@ router.post('/',async function(req,res,next){
 	// await Characters.create({nombre:req.body.nombre,edad:req.body.edad,peso:req.body.peso,historia:req.body.historia,imagen:req.body.imagen});
 	// res.status(200).send('Created'+ newChar.Id);
 });
+
+// router.post('/')
 
 router.put('/', async function(req,res,next){
 	await Characters.update({
