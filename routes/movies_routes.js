@@ -4,24 +4,33 @@ const sequelize = new Sequelize("sqlite::memory:");
 var router = express.Router();
 
 const Movie = require('../models/pelicula.js');
+const Personaje = require('../models/personaje');
 const Genero = require('../models/genero.js');
 
 router.get('/', function(req, res, next) {
 	Movie.findAll({
+		attributes: ['imagen', 'titulo','fecha_creacion']
+	}).then((movies) => {
+		res.status(200).send(movies);
+	}).catch((err) =>{
+		res.status(500).send({'message':'Hubo un error...'});
+	});
+});
+
+router.get('/detalle/:id', function(req, res, next) {
+	Movie.findAll({
 		include: [{// Notice `include` takes an ARRAY
-			model: Genero
+			model: Personaje
 		}]
 	}).then((movies) => {
 		res.status(200).send(movies);
 	}).catch((err) =>{
-		console.log(err);
-	})
+		res.status(500).send({'message':'Hubo un error...'});
+	});
 });
 
 router.post('/', async function(req, res, next) {
 
-	// const gen = await Genero.findOne({where:{id:req.body.id_genero}});
-	// let movie = await Movie.create({
 	await Movie.create({
 		'titulo':req.body.titulo,
 		'imagen':req.body.imagen,
@@ -30,11 +39,6 @@ router.post('/', async function(req, res, next) {
 	}).then((item)=>{
 		res.status(200).send({'message':'Nueva Peli creada', 'id':item.id})
 	})
-	// movie.addGenero(gen).then(async (item) => {
-	// 	// const gen = await Genero.findOne({where:{id:req.body.id_genero}});
-	// 	// Movie.addGenero(gen).then(res.status(200).send({'message':'Nuevo Genero creado', 'id':item.id}));
-	// 	res.status(200).send({'message':'Nueva Peli creada', 'id':item.id})
-	// })
 	.catch((err)=>{
 		console.log(err);
 			res.status(500).send({'message':'Hubo un problema...','error':err});

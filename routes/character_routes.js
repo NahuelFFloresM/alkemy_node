@@ -5,13 +5,13 @@ const Movie = require('../models/pelicula.js');
 const Characters = require('../models/personaje.js');
 
 router.get('/', async function(req, res, next) {
-	
-	Characters.findAll().then( (users) => {
+	Characters.findAll({
+		where: req.query
+	}).then( (users) => {
 		res.status(200).send(users);
 	}).catch((error) => {
-		console.log(error);
+		res.staus(404).send({'message':'Error en los datos pedidos'})
 	});
-
 });
 
 router.post('/',async function(req,res,next){

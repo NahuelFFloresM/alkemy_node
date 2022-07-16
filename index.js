@@ -30,11 +30,11 @@ var authRoutes = require('./routes/auth_routes');
 
 
 // ROUTES
-app.use('/', routes);
 app.use('/characters', charactersRoutes);
 app.use('/movies', moviesRoutes);
 app.use('/genero', generosRoutes);
 app.use('/auth', authRoutes);
+app.use('/', routes);
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('*', (req, res) => res.status(200).send('Oops, looks like theres no where to go...',));

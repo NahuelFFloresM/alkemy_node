@@ -7,6 +7,7 @@ const Usuario = sequelize.define("usuario", {
   apellido: DataTypes.TEXT,
   contrasena: DataTypes.TEXT,
   email: DataTypes.TEXT,
+  peso: DataTypes.INTEGER
 },
 {
   timestamps: false,
