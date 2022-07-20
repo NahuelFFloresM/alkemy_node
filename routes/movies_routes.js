@@ -46,6 +46,28 @@ router.post('/', async function(req, res, next) {
 });
 // TO DO- POST PARA AGREGAR GENERO A LA PELICULA
 
+router.post('/populate', async function (req,res,next){
+	const pelicula = await Movie.findOne({where:{
+		id: req.body.movie_id
+	}});
+	console.log(pelicula);
+	try {
+		// TO DO- CHEQUEAR DE QUE NO EXISTAN LOS DATOS A AGREGAR
+		if (req.body.characters){
+			const chars = await Personaje.findAll({where: {id:req.body.characters}});
+			await pelicula.addPersonaje(chars);
+		}
+		if (req.body.generos){
+			const generos = await Genero.findAll({where: {id:req.body.generos}});
+			await pelicula.addGenero(generos);
+		}
+		res.status(200).send({'message':'Agregados Correctamente'});
+	} catch (error) {
+		res.status(500).send({'message':'Error inesperado'});
+	}
+	
+});
+
 router.put('/',async function(req,res,next){
 	let img = req.body.imagen || 'default.png';
 	//**TO DO, UPDATE BY PARTS AND FOREIGN KEY*/
