@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 	Genero.findAll().then((Generos) => {
 		res.status(200).send(Generos);
 	}).catch((err) =>{
-		res.status(500).send({'message':'Hubo un error....','error':err});
+		res.status(500).send({'message':'Hubo un error....'});
 	});
 });
 
@@ -17,7 +17,7 @@ router.post('/', async function(req,res,next){
 		res.status(200).send({'message':'Nuevo Genero creado', 'id':item.id});
 	})
 	.catch((err)=>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 })
 
@@ -30,7 +30,7 @@ router.put('/', async function(req,res,next){
 		res.status(200).send({'message':'Genero editado', 'id':item.id});
 	})
 	.catch((err)=>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 });
 
@@ -43,7 +43,7 @@ router.delete('/', async function (req,res,next){
 		res.status(200).send({'message':'Genero Borrado'});
 	})
 	.catch((err)=>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 
 });
