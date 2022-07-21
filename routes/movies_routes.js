@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/detalle/:id', function(req, res, next) {
 	Movie.findAll({
-		include: [{// Notice `include` takes an ARRAY
+		include: [{
 			model: Personaje
 		}]
 	}).then((movies) => {
@@ -41,18 +41,15 @@ router.post('/', async function(req, res, next) {
 	})
 	.catch((err)=>{
 		console.log(err);
-			res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});		
 });
-// TO DO- POST PARA AGREGAR GENERO A LA PELICULA
 
 router.post('/populate', async function (req,res,next){
 	const pelicula = await Movie.findOne({where:{
 		id: req.body.movie_id
 	}});
-	console.log(pelicula);
 	try {
-		// TO DO- CHEQUEAR DE QUE NO EXISTAN LOS DATOS A AGREGAR
 		if (req.body.characters){
 			const chars = await Personaje.findAll({where: {id:req.body.characters}});
 			await pelicula.addPersonaje(chars);
@@ -70,7 +67,6 @@ router.post('/populate', async function (req,res,next){
 
 router.put('/',async function(req,res,next){
 	let img = req.body.imagen || 'default.png';
-	//**TO DO, UPDATE BY PARTS AND FOREIGN KEY*/
 	await Movie.update({
 		'titulo':req.body.titulo,
 		'imagen':img,
@@ -84,7 +80,7 @@ router.put('/',async function(req,res,next){
 		res.status(200).send({'message':'Genero editado', 'id':item.id});
 	})
 	.catch((err)=>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 });
 
@@ -94,8 +90,29 @@ router.delete('/',async function(req,res,next){
 		res.status(200).send({'message':'Borrado con exito'})
 	)
 	.catch((err) =>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	})
+});
+
+router.delete('/genero', async function(req,res,next){
+	let gen = Genero.findOne({where:{id:req.body.id_genero}});
+	try {
+		if (gen){
+			await Movie.findOne({where:{id:req.body.id_movie}}).removeGenero(gen)
+			.then((resp) => {
+				res.status(200).send({'message':'Borrado exitosamente'});
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).send({'message':'Error inesperado'});
+			});
+		} else {
+			res.status(400).send({'message':'Genero inexistente'});
+		};		
+	} catch (error) {
+		console.log(error);
+		res.status(500).send({'message':'Error inesperado'});
+	}	
 });
 
 
