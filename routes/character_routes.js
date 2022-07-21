@@ -14,6 +14,19 @@ router.get('/', async function(req, res, next) {
 	});
 });
 
+router.get('/:id/detalle', async function(req, res, next) {
+	Characters.findOne({
+		where:{
+			id:req.params.id
+		},
+		include: Movie
+	}).then( (user) => {
+		res.status(200).send(user);
+	}).catch((error) => {
+		res.staus(404).send({'message':'Error en los datos pedidos'})
+	});
+});
+
 router.post('/',async function(req,res,next){
 	await Characters.create({
 		'nombre':req.body.nombre,
@@ -26,7 +39,7 @@ router.post('/',async function(req,res,next){
 	})
 	.catch((err)=>{
 		console.log(err);
-			res.status(500).send({'message':'Hubo un problema...','error':err});
+			res.status(500).send({'message':'Hubo un problema...'});
 	});
 });
 
@@ -45,7 +58,7 @@ router.put('/', async function(req,res,next){
 		res.status(200).send({'message':'Personaje editado', 'id':item.id});
 	})
 	.catch((err)=>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 });
 
@@ -55,7 +68,7 @@ router.delete('/',async function(req,res,next){
 		res.status(200).send({'message':'Borrado con exito'})
 	)
 	.catch((err) =>{
-		res.status(500).send({'message':'Hubo un problema...','error':err});
+		res.status(500).send({'message':'Hubo un problema...'});
 	});
 });
 
