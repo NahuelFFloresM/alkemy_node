@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-router.get('/detalle/:id', function(req, res, next) {
+router.get('/:id/detalle', function(req, res, next) {
 	Movie.findAll({
 		include: [{
 			model: Personaje
@@ -25,6 +25,35 @@ router.get('/detalle/:id', function(req, res, next) {
 	}).then((movies) => {
 		res.status(200).send(movies);
 	}).catch((err) =>{
+		res.status(500).send({'message':'Hubo un error...'});
+	});
+});
+
+router.get('/buscar', function(req, res, next) {
+	let genre = {};
+	let query = {};
+	let order = [];
+	if (req.query.hasOwnProperty('genre')){
+		genre.id = req.query.genre;
+		delete req.query['genre'];
+	}
+	if (req.query.hasOwnProperty('name')){
+		query.titulo = req.query.name;
+	}
+	if (req.query.hasOwnProperty('order')){
+		order.push(['titulo',req.query.order]);
+	}
+	Movie.findAll({
+		where: query,
+		include: [{
+			model: Genero,
+			where: genre
+		}],
+		order: order
+	}).then((movies) => {
+		res.status(200).send(movies);
+	}).catch((err) =>{
+		console.log(err);
 		res.status(500).send({'message':'Hubo un error...'});
 	});
 });
@@ -84,8 +113,8 @@ router.put('/',async function(req,res,next){
 	});
 });
 
-router.delete('/',async function(req,res,next){
-	await Movie.delete({where:{id:req.body.id_movie}})
+router.delete('/:id',async function(req,res,next){
+	await Movie.destroy({where:{id:req.params.id}})
 	.then(
 		res.status(200).send({'message':'Borrado con exito'})
 	)

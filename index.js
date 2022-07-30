@@ -5,6 +5,7 @@ const express = require("express");
 const logger = require('morgan');
 var path = require('path');
 const bodyParser = require('body-parser');
+const middlewares = require('./middlewares/middlewares');
 
 // This will be our application entry. We'll setup our server here.
 const http = require('http');
@@ -30,9 +31,9 @@ var authRoutes = require('./routes/auth_routes');
 
 
 // ROUTES
-app.use('/characters', charactersRoutes);
-app.use('/movies', moviesRoutes);
-app.use('/genero', generosRoutes);
+app.use('/characters', middlewares.isLoggedIn, charactersRoutes);
+app.use('/movies', middlewares.isLoggedIn, moviesRoutes);
+app.use('/genero', middlewares.isLoggedIn, generosRoutes);
 app.use('/auth', authRoutes);
 app.use('/', routes);
 
@@ -40,7 +41,7 @@ app.use('/', routes);
 app.get('*', (req, res) => res.status(200).send('Oops, looks like theres no where to go...',));
 
 
-// Seteado Base de Datos
+// Conexion Base de Datos
 const sequelize = require("./db");
 sequelize.sync({force:false});
 

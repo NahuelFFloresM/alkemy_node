@@ -10,7 +10,7 @@ router.get('/', async function(req, res, next) {
 	}).then( (users) => {
 		res.status(200).send(users);
 	}).catch((error) => {
-		res.staus(404).send({'message':'Error en los datos pedidos'})
+		res.status(404).send({'message':'Error en los datos pedidos'})
 	});
 });
 
@@ -23,7 +23,7 @@ router.get('/:id/detalle', async function(req, res, next) {
 	}).then( (user) => {
 		res.status(200).send(user);
 	}).catch((error) => {
-		res.staus(404).send({'message':'Error en los datos pedidos'})
+		res.status(404).send({'message':'Error en los datos pedidos'})
 	});
 });
 
@@ -62,8 +62,8 @@ router.put('/', async function(req,res,next){
 	});
 });
 
-router.delete('/',async function(req,res,next){
-	await Characters.delete({where:{id:req.body.id_personaje}})
+router.delete('/:id',async function(req,res,next){
+	await Characters.delete({where:{id:req.params.id}})
 	.then(
 		res.status(200).send({'message':'Borrado con exito'})
 	)

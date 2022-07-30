@@ -34,10 +34,10 @@ router.put('/', async function(req,res,next){
 	});
 });
 
-router.delete('/', async function (req,res,next){
+router.delete('/:id', async function (req,res,next){
 	await Genero.destroy({
 		where: {
-			id: req.body.id_genero
+			id: req.params.id
 		}
 	}).then(() => {
 		res.status(200).send({'message':'Genero Borrado'});
